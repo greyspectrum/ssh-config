@@ -1,6 +1,6 @@
 # ssh-config
 
-Edits your ssh_config to set secure default ciphers, settings, MACs, & block cipher modes.
+Edits your ssh_config to set secure default ciphers, settings, MACs, & block cipher modes of operation.
 
 Chosen defaults are based on original work by Stribika, available [here](https://stribika.github.io/2015/01/04/secure-secure-shell.html).
 
