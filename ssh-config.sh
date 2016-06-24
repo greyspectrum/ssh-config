@@ -65,11 +65,11 @@ if test -e /etc/ssh/moduli ; then
 	awk '$5 > 2000' /etc/ssh/moduli > "~/moduli"
 	wc -l "~/moduli" # make sure there is something left
 	mv "~/moduli" /etc/ssh/moduli
-	else
-		ssh-keygen -G /etc/ssh/moduli.all -b 4096
-		ssh-keygen -T /etc/ssh/moduli.safe -f /etc/ssh/moduli.all
-		mv /etc/ssh/moduli.safe /etc/ssh/moduli
-		rm /etc/ssh/moduli.all
+else
+	ssh-keygen -G /etc/ssh/moduli.all -b 4096
+	ssh-keygen -T /etc/ssh/moduli.safe -f /etc/ssh/moduli.all
+	mv /etc/ssh/moduli.safe /etc/ssh/moduli
+	rm /etc/ssh/moduli.all
 fi
 
 # Generate client ssh keys
