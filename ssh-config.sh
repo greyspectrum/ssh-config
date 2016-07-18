@@ -14,6 +14,19 @@
 # :version: 0.0.2
 ##############################################################################
 
+# Introduce changes
+
+echo -e "This script will apply the following changes to ssh_config:\n\nKey Exchange Algorithms:\n-ECDH over Curve25519 with SHA2\n-Diffie Hellman Group Exchange with SHA2\n\nServer Authentication:\n-Ed25519 with SHA512\n-RSA with SHA1\n\nClient Authentication:\n-Password Authentication: no\n-Challenge Response Authentication: no\n-Public Key Authentication: yes\n\nHost Keys will be created, after an additional prompt, with Ed25519 and 4096 RSA. If you already have host keys, you may skip this step.\n\nSymmetric Ciphers & Modes of Operation:\n-Chacha20\n-AES 256, GCM\n-AES 128, GCM\n-AES 256, CTR\n-AES 192, CTR\n-AES 128, CTR\n\nMessage Authentication Codes:\n-hmac-sha2-512-etm\n-hmac-sha2-256-etm\n-hmac-ripemd160-etm\n-umac-128-etm\n-hmac-sha2-512\n-hmac-sha2-256\n-hmac-ripemd160\n-umac-128\n\nUse Roaming: no\n\nInsecure options will be disabled.\n"
+
+while true; do
+    read -p "Do you wish to apply these changes?" yn
+    case $yn in
+        [Yy]* ) echo -e "\nStarting ssh_config...\n"; break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer y (yes) or n (no).";;
+    esac
+done
+
 # Prompt the user for root
 
 [ "$(whoami)" != "root" ] && exec sudo -- "$0" "$@"
