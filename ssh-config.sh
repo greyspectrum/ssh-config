@@ -10,11 +10,27 @@
 # https://stribika.github.io/2015/01/04/secure-secure-shell.html
 #
 # :author: greyspectrum
-# :date: 17 July 2016
-# :version: 0.0.2
+# :date: 18 July 2016
+# :version: 0.0.3
 ##############################################################################
 
-# Introduce changes
+# Define variables (edit these if you want to test this script without altering your ssh_config)
+
+SSH_CONFIG="/etc/ssh/ssh_config"
+
+BACKUP_SSH_CONFIG="/etc/ssh/ssh_config.bak"
+
+SECURE_SSH_CONFIG="/etc/ssh/ssh_config.secure"
+
+MODULI="/etc/ssh/moduli"
+
+BACKUP_MODULI="/etc/ssh/moduli.bak"
+
+ALL_MODULI="/etc/ssh/moduli.all"
+
+SAFE_MODULI="/etc/ssh/moduli.safe"
+
+# Introduce changes to the user and ask for confirmation before running
 
 echo -e "This script will apply the following changes to ssh_config:\n\nKey Exchange Algorithms:\n-ECDH over Curve25519 with SHA2\n-Diffie Hellman Group Exchange with SHA2\n\nServer Authentication:\n-Ed25519 with SHA512\n-RSA with SHA1\n\nClient Authentication:\n-Password Authentication: no\n-Challenge Response Authentication: no\n-Public Key Authentication: yes\n\nHost Keys will be created, after an additional prompt, with Ed25519 and 4096 RSA. If you already have host keys, you may skip this step.\n\nSymmetric Ciphers & Modes of Operation:\n-Chacha20\n-AES 256, GCM\n-AES 128, GCM\n-AES 256, CTR\n-AES 192, CTR\n-AES 128, CTR\n\nMessage Authentication Codes:\n-hmac-sha2-512-etm\n-hmac-sha2-256-etm\n-hmac-ripemd160-etm\n-umac-128-etm\n-hmac-sha2-512\n-hmac-sha2-256\n-hmac-ripemd160\n-umac-128\n\nUse Roaming: no\n\nInsecure options will be disabled. Your current ssh_config will be backed up at /etc/ssh/ssh_config.bak.\n"
 
@@ -33,11 +49,11 @@ done
 
 # Backup current ssh configuration file
 
-cp /etc/ssh/ssh_config /etc/ssh/ssh_config.bak
+cp $SSH_CONFIG $BACKUP_SSH_CONFIG
 
 # Set password authentication to no
 
-sed '$ a PasswordAuthentication no' /etc/ssh/ssh_config | \
+sed '$ a PasswordAuthentication no' $SSH_CONFIG | \
 
 # Set challenge response authentication to no
 
@@ -93,20 +109,20 @@ sed '$ a	MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-r
 
 sed '$ a Host *' | \
 
-sed '$ a	UseRoaming no' > /etc/ssh/ssh_config.secure
+sed '$ a	UseRoaming no' > $SECURE_SSH_CONFIG
 
 # Remove prime numbers with size in bits < 2000
 
-if test -e /etc/ssh/moduli ; then
-	cp /etc/ssh/moduli /etc/ssh/moduli.bak
-	awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
+if test -e $MODULI ; then
+	cp $MODULI $BACKUP_MODULI
+	awk '$5 > 2000' $MODULI > "${HOME}/moduli"
 	wc -l "${HOME}/moduli" # make sure there is something left
-	mv "${HOME}/moduli" /etc/ssh/moduli
+	mv "${HOME}/moduli" $MODULI
 else
-	ssh-keygen -G /etc/ssh/moduli.all -b 4096
-	ssh-keygen -T /etc/ssh/moduli.safe -f /etc/ssh/moduli.all
-	mv /etc/ssh/moduli.safe /etc/ssh/moduli
-	rm /etc/ssh/moduli.all
+	ssh-keygen -G $ALL_MODULI -b 4096
+	ssh-keygen -T $SAFE_MODULI -f $ALL_MODULI
+	mv $SAFE_MODULI $MODULI
+	rm $ALL_MODULI
 fi
 
 # Prompt user to save changes
@@ -114,7 +130,7 @@ fi
 while true; do
     read -p "Do you want to commit changes made to ssh_config (your previous configuration will be saved at /etc/ssh/ssh_config.bak)?" yn
     case $yn in
-        [Yy]* ) mv /etc/ssh/ssh_config.secure /etc/ssh/ssh_config; break;;
+        [Yy]* ) mv $SECURE_SSH_CONFIG $SSH_CONFIG; break;;
         [Nn]* ) exit;;
         * ) echo "Please answer y (yes) or n (no).";;
     esac
