@@ -10,7 +10,7 @@
 # https://stribika.github.io/2015/01/04/secure-secure-shell.html
 #
 # :author: greyspectrum
-# :date: 18 July 2016
+# :date: 20 July 2016
 # :version: 0.0.4
 ##############################################################################
 
