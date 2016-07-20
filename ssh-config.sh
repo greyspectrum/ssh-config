@@ -51,65 +51,9 @@ done
 
 cp $SSH_CONFIG $BACKUP_SSH_CONFIG
 
-# Set password authentication to no
+# Create new ssh config file
 
-sed '$ a PasswordAuthentication no' $SSH_CONFIG | \
-
-# Set challenge response authentication to no
-
-sed '$ a ChallengeResponseAuthentication no' | \
-
-sed '$ a Host *' | \
-
-sed '$ a	PasswordAuthentication no' | \
-
-sed '$ a	ChallengeResponseAuthentication no' | \
-
-# Set public key authentication to yes && select algorithms
-
-sed '$ a PubkeyAuthentication yes' | \
-
-sed '$ a Host *' | \
-
-sed '$ a	PubkeyAuthentication yes' | \
-
-sed '$ a	HostAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' | \
-
-# Set key exchange algorithms
-
-sed '$ a KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' | \
-
-sed '$ a # Github needs diffie-hellman-group-exchange-sha1 some of the time but not always.' | \
-
-sed '$ a Host github.com' | \
-
-sed '$ a 	KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1' | \
-
-sed '$ a Host *' | \
-
-sed '$ a	KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' | \
-
-# Set preferred symmetric ciphers and modes
-
-sed '$ a Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' | \
-
-sed '$ a Host *' | \
-
-sed '$ a	Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' | \
-
-# Set preferred MACs
-
-sed '$ a MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com' | \
-
-sed '$ a Host *' | \
-
-sed '$ a	MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com' | \
-
-# Turn off UseRoaming
-
-sed '$ a Host *' | \
-
-sed '$ a	UseRoaming no' > $SECURE_SSH_CONFIG
+echo -e "    PasswordAuthentication no \n    ChallengeResponseAuthentication no \n    Host * \n          PasswordAuthentication no \n          ChallengeResponseAuthentication no \n    PubkeyAuthentication yes \n    Host * \n           PubkeyAuthentication yes \n           HostAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa \n    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256 \n#   Github needs diffie-hellman-group-exchange-sha1 some of the time but not always. \n    Host github.com \n           KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1 \n    Host * \n           KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256 \n    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr \n    Host * \n           Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr \n    MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com \n    Host * \n           MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com \n    HashKnownHosts yes \n    UseRoaming no \n    Host * \n           UseRoaming no" > $SECURE_SSH_CONFIG
 
 # Remove prime numbers with size in bits < 2000
 
