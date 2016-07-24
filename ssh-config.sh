@@ -53,6 +53,7 @@ if grep -Fxq "PasswordAuthentication yes" $SSH_CONFIG ; then
                         * ) echo "Please answer y (yes) or n (no).";;
                 esac
         done
+
 else echo "Password Authentication is set to \"no\". This is the recommended setting."
 
 fi
@@ -66,6 +67,7 @@ if grep -Fxq "ChallengeResponseAuthentication yes" $SSH_CONFIG ; then
                         * ) echo "Please answer y (yes) or n (no).";;
                 esac
         done
+
 else echo "Challenge Response Authentication is set to \"no\". This is the recommended setting."
 
 fi
@@ -79,6 +81,7 @@ if grep -Fxq "PubkeyAuthentication no" $SSH_CONFIG ; then
                         * ) echo "Please answer y (yes) or n (no).";;
                 esac
         done
+
 else echo "Pubkey Authentication is set to \"yes\". This is the recommended setting."
 
 fi
@@ -92,6 +95,7 @@ if grep -Fxq "HashKnownHosts no" $SSH_CONFIG ; then
                         * ) echo "Please answer y (yes) or n (no).";;
                 esac
         done
+
 else echo "Hash Known Hosts is set to \"yes\". This is the recommended setting."
 
 fi
@@ -105,6 +109,7 @@ if grep -Fxq "UseRoaming yes" $SSH_CONFIG ; then
                         * ) echo "Please answer y (yes) or n (no).";;
                 esac
         done
+
 else echo "Use Roaming is set to \"no\". This is the recommended setting."
 
 fi
