@@ -11,7 +11,7 @@
 #
 # :author: greyspectrum
 # :date: 24 July 2016
-# :version: 0.0.5
+# :version: 0.9.5
 ##############################################################################
 
 # Define variables (edit these if you want to test this script without altering your ssh_config)
