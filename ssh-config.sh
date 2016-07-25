@@ -102,7 +102,7 @@ fi
 
 if grep -Fxq "UseRoaming yes" $SSH_CONFIG ; then
         while true; do
-                read -p "Use Roaming is set to \"yes\". Change to \"nos\" (strongly recommended)?" yn
+                read -p "Use Roaming is set to \"yes\". Change to \"no\" (strongly recommended)?" yn
                 case $yn in
                         [Yy]* ) exit ;;
                         [Nn]* ) sed -i 's/HashKnownHosts no/HashKnownHosts yes/g' $SECURE_SSH_CONFIG ;;
